@@ -80,6 +80,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearInput = document.getElementById('year');
   const monthInput = document.getElementById('month');
   const dayInput = document.getElementById('day');
+
+  // RSS 프리셋 관리
+  let currentRssUrl = 'http://feeds.bbci.co.uk/news/rss.xml'; // 기본값 BBC News
+  function setRssUrl(url) {
+    currentRssUrl = url;
+    // 모든 preset-btn에서 active 표시
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.url === url);
+    });
+  }
+  // 프리셋 버튼 이벤트
+  function setupPresetBtns(formSelector) {
+    document.querySelectorAll(formSelector + ' .preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setRssUrl(btn.dataset.url);
+      });
+    });
+  }
+  setupPresetBtns('#date-search-form');
+  setupPresetBtns('#keyword-search-form');
+  setupPresetBtns('#detail-search-form');
+  setRssUrl(currentRssUrl); // 초기화
+
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       tabBtns.forEach(b => b.classList.remove('active'));
@@ -220,8 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       m = String(monthInput.value).padStart(2, '0');
       d = String(dayInput.value).padStart(2, '0');
     }
-    // 예시: BBC News RSS 사용 (실제 서비스 시 날짜별 RSS API 필요)
-    const url = 'http://feeds.bbci.co.uk/news/rss.xml';
+    const url = currentRssUrl;
     newsCards.innerHTML = '<p>뉴스를 불러오는 중...</p>';
     try {
       const newsArr = await fetchRssAndParse(url);
@@ -245,9 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const keyword = keywordForm.keyword.value.trim();
     if (!keyword) return;
+    const url = currentRssUrl;
     keywordCards.innerHTML = '<p>뉴스를 불러오는 중...</p>';
     try {
-      const url = 'http://feeds.bbci.co.uk/news/rss.xml';
       const newsArr = await fetchRssAndParse(url);
       const filtered = newsArr.filter(n => n.title.includes(keyword) || n.desc.includes(keyword));
       if (filtered.length === 0) {
@@ -268,9 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const keyword = detailForm['detail-keyword'].value.trim();
     const press = detailForm.press.value.trim();
     const category = detailForm.category.value.trim();
+    const url = currentRssUrl;
     detailCards.innerHTML = '<p>뉴스를 불러오는 중...</p>';
     try {
-      const url = 'http://feeds.bbci.co.uk/news/rss.xml';
       const newsArr = await fetchRssAndParse(url);
       const filtered = newsArr.filter(n => {
         let ok = true;
