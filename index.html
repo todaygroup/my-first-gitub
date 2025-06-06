@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최신 뉴스 카드 - RSS 카드 뉴스</title>
+  <meta name="description" content="최신 뉴스를 RSS로 받아 카드 형태로 보여주는 글로벌 웹사이트">
+  <meta name="keywords" content="뉴스, RSS, 카드뉴스, 글로벌, 접근성, 국제화">
+  <meta name="author" content="Your Company or Name">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *;">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>📰 최신 뉴스 카드</h1>
+    <nav aria-label="주요 메뉴">
+      <a href="#main" class="sr-only">본문 바로가기</a>
+      <a href="/">홈</a>
+      <a href="/about">소개</a>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <section aria-labelledby="rss-section-title">
+      <h2 id="rss-section-title">RSS 뉴스 불러오기</h2>
+      <form id="rss-form" aria-label="RSS 피드 입력">
+        <label for="rss-url">RSS 피드 URL:</label>
+        <input type="url" id="rss-url" name="rss-url" placeholder="https://news.example.com/rss" required>
+        <button type="submit">불러오기</button>
+      </form>
+      <div>
+        <button class="preset-btn" data-url="https://www.yonhapnewstv.co.kr/browse/feed/">연합뉴스TV</button>
+        <button class="preset-btn" data-url="http://feeds.bbci.co.uk/news/rss.xml">BBC News</button>
+      </div>
+    </section>
+    <section id="news-cards" aria-live="polite" aria-label="뉴스 카드 목록">
+      <!-- 카드 뉴스가 여기에 동적으로 생성됩니다 -->
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2024 Your Company. 모든 권리 보유.</p>
+    <p><a href="/privacy">개인정보 처리방침</a></p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
