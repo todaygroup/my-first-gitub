@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 탭 전환
+  // 탭 전환 및 프리셋 관리
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
   const newsCards = document.getElementById('news-cards');
@@ -85,23 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentRssUrl = 'http://feeds.bbci.co.uk/news/rss.xml'; // 기본값 BBC News
   function setRssUrl(url) {
     currentRssUrl = url;
-    // 모든 preset-btn에서 active 표시
     document.querySelectorAll('.preset-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.url === url);
     });
   }
-  // 프리셋 버튼 이벤트
   function setupPresetBtns(formSelector) {
     document.querySelectorAll(formSelector + ' .preset-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        setRssUrl(btn.dataset.url);
-      });
+      btn.addEventListener('click', () => setRssUrl(btn.dataset.url));
     });
   }
   setupPresetBtns('#date-search-form');
   setupPresetBtns('#keyword-search-form');
   setupPresetBtns('#detail-search-form');
-  setRssUrl(currentRssUrl); // 초기화
+  setRssUrl(currentRssUrl);
 
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -112,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 공통: 대체 이미지
+  // 이미지 대체
   const fallbackImg = 'https://via.placeholder.com/300x160?text=No+Image';
   function formatDate(dateStr) {
     if (!dateStr) return '날짜 없음';
@@ -141,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setScraps(scraps);
   }
 
-  // 카드 생성 함수 (공통)
+  // 카드 생성 함수
   function createNewsCard(news, scrapMode = false) {
     const card = document.createElement('article');
     card.className = 'news-card';
@@ -169,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 날짜별 그룹화 렌더링
   function renderNewsByDate(newsArr, container) {
     container.innerHTML = '';
-    // pubDate 기준 그룹화
     const grouped = {};
     newsArr.forEach(news => {
       if (!grouped[news.date]) grouped[news.date] = [];
@@ -231,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 날짜검색 탭
+  // 날짜검색
   const dateForm = document.getElementById('date-search-form');
   dateForm.addEventListener('submit', async e => {
     e.preventDefault();
@@ -247,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     newsCards.innerHTML = '<p>뉴스를 불러오는 중...</p>';
     try {
       const newsArr = await fetchRssAndParse(url);
-      // 선택 날짜만 필터
       const filterDate = `${y}-${m}-${d}`;
       const filtered = newsArr.filter(n => n.date === filterDate);
       if (filtered.length === 0) {
@@ -260,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 키워드검색 탭
+  // 키워드검색
   const keywordForm = document.getElementById('keyword-search-form');
   const keywordCards = document.getElementById('keyword-news-cards');
   keywordForm.addEventListener('submit', async e => {
@@ -282,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 상세검색 탭
+  // 상세검색
   const detailForm = document.getElementById('detail-search-form');
   const detailCards = document.getElementById('detail-news-cards');
   detailForm.addEventListener('submit', async e => {
@@ -311,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 마이스크랩 탭
+  // 마이스크랩
   const scrapCards = document.getElementById('scrap-news-cards');
   function renderScrapCards() {
     const scraps = getScraps();
@@ -323,6 +317,78 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   document.getElementById('tab-scrap').addEventListener('show', renderScrapCards);
-  // 탭 전환 시 마이스크랩 새로고침
   [...tabBtns].find(btn => btn.dataset.tab === 'scrap').addEventListener('click', renderScrapCards);
+
+  // i18n 다국어 리소스
+  const i18n = {
+    ko: {
+      title: '📰 뉴스 카드 아카이브',
+      skip: '본문 바로가기',
+      tab_date: '날짜검색',
+      tab_keyword: '키워드검색',
+      tab_detail: '상세검색',
+      tab_scrap: '마이스크랩',
+      label_date: '날짜',
+      or: '또는',
+      label_year: '연도',
+      label_month: '월',
+      label_day: '일',
+      preset_yna: '연합뉴스TV',
+      preset_bbc: 'BBC News',
+      go: '이동',
+      label_keyword: '키워드',
+      search: '검색',
+      label_press: '언론사',
+      label_category: '카테고리',
+      detail_search: '상세검색',
+      all_rights: '모든 권리 보유.'
+    },
+    en: {
+      title: '📰 News Card Archive',
+      skip: 'Skip to main',
+      tab_date: 'Date Search',
+      tab_keyword: 'Keyword Search',
+      tab_detail: 'Advanced Search',
+      tab_scrap: 'My Scrap',
+      label_date: 'Date',
+      or: 'or',
+      label_year: 'Year',
+      label_month: 'Month',
+      label_day: 'Day',
+      preset_yna: 'Yonhap News TV',
+      preset_bbc: 'BBC News',
+      go: 'Go',
+      label_keyword: 'Keyword',
+      search: 'Search',
+      label_press: 'Press',
+      label_category: 'Category',
+      detail_search: 'Advanced Search',
+      all_rights: 'All rights reserved.'
+    }
+  };
+
+  function setLang(lang) {
+    const dict = i18n[lang] || i18n.ko;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = dict[key];
+        } else {
+          el.textContent = dict[key];
+        }
+      }
+    });
+    document.documentElement.lang = lang;
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setLang(btn.dataset.lang);
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  // 페이지 로드 시 기본 언어 설정
+  setLang('ko');
 }); 

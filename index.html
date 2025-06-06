@@ -2,30 +2,23 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>최신 뉴스 카드 - RSS 카드 뉴스</title>
-  <meta name="description" content="최신 뉴스를 RSS로 받아 카드 형태로 보여주는 글로벌 웹사이트">
-  <meta name="keywords" content="뉴스, RSS, 카드뉴스, 글로벌, 접근성, 국제화">
-  <meta name="author" content="Your Company or Name">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *;">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <title>뉴스 카드 아카이브</title>
+  <meta name="description" content="글로벌 표준, 접근성, 국제화를 준수한 뉴스 카드 아카이브">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>📰 최신 뉴스 카드</h1>
+    <h1>📰 뉴스 카드 아카이브</h1>
     <nav aria-label="주요 메뉴">
       <a href="#main" class="sr-only">본문 바로가기</a>
-      <a href="/">홈</a>
-      <a href="/about">소개</a>
     </nav>
   </header>
   <nav class="main-tabs" aria-label="검색 분류">
-    <button class="tab-btn active" data-tab="date">날짜검색</button>
-    <button class="tab-btn" data-tab="keyword">키워드검색</button>
-    <button class="tab-btn" data-tab="detail">상세검색</button>
-    <button class="tab-btn" data-tab="scrap">마이스크랩</button>
+    <button class="tab-btn active" data-tab="date" type="button">날짜검색</button>
+    <button class="tab-btn" data-tab="keyword" type="button">키워드검색</button>
+    <button class="tab-btn" data-tab="detail" type="button">상세검색</button>
+    <button class="tab-btn" data-tab="scrap" type="button">마이스크랩</button>
   </nav>
   <main id="main" tabindex="-1">
     <!-- 날짜검색 -->
@@ -40,6 +33,10 @@
         <input type="number" id="month" name="month" min="1" max="12" value="6" required>
         <label for="day">일</label>
         <input type="number" id="day" name="day" min="1" max="31" value="6" required>
+        <div class="preset-group">
+          <button type="button" class="preset-btn" data-url="https://www.yonhapnewstv.co.kr/browse/feed/">연합뉴스TV</button>
+          <button type="button" class="preset-btn" data-url="http://feeds.bbci.co.uk/news/rss.xml">BBC News</button>
+        </div>
         <button type="submit">이동</button>
       </form>
       <div id="news-cards"></div>
@@ -49,6 +46,10 @@
       <form id="keyword-search-form" aria-label="키워드 검색">
         <label for="keyword">키워드</label>
         <input type="text" id="keyword" name="keyword" required>
+        <div class="preset-group">
+          <button type="button" class="preset-btn" data-url="https://www.yonhapnewstv.co.kr/browse/feed/">연합뉴스TV</button>
+          <button type="button" class="preset-btn" data-url="http://feeds.bbci.co.uk/news/rss.xml">BBC News</button>
+        </div>
         <button type="submit">검색</button>
       </form>
       <div id="keyword-news-cards"></div>
@@ -62,6 +63,10 @@
         <input type="text" id="press" name="press">
         <label for="category">카테고리</label>
         <input type="text" id="category" name="category">
+        <div class="preset-group">
+          <button type="button" class="preset-btn" data-url="https://www.yonhapnewstv.co.kr/browse/feed/">연합뉴스TV</button>
+          <button type="button" class="preset-btn" data-url="http://feeds.bbci.co.uk/news/rss.xml">BBC News</button>
+        </div>
         <button type="submit">상세검색</button>
       </form>
       <div id="detail-news-cards"></div>
@@ -74,7 +79,6 @@
   </main>
   <footer>
     <p>&copy; 2024 Your Company. 모든 권리 보유.</p>
-    <p><a href="/privacy">개인정보 처리방침</a></p>
   </footer>
   <script src="app.js"></script>
 </body>

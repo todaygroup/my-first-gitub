@@ -89,6 +89,17 @@ nav a:focus, nav a:hover { text-decoration: underline; }
 }
 .tab-content { margin-top: 2rem; }
 [hidden] { display: none !important; }
+.preset-group { margin: 1rem 0; }
+.preset-btn {
+  padding: 0.4rem 1rem;
+  margin-right: 0.5rem;
+  border: none;
+  background: #888;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.preset-btn.active { background: #0055a5; }
 @media (max-width: 700px) {
   #news-cards, .news-date-group { flex-direction: column; align-items: center; }
   .news-card { width: 95%; }
