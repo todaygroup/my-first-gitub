@@ -21,21 +21,52 @@
       <a href="/about">소개</a>
     </nav>
   </header>
+  <nav class="main-tabs" aria-label="검색 분류">
+    <button class="tab-btn active" data-tab="date">날짜검색</button>
+    <button class="tab-btn" data-tab="keyword">키워드검색</button>
+    <button class="tab-btn" data-tab="detail">상세검색</button>
+    <button class="tab-btn" data-tab="scrap">마이스크랩</button>
+  </nav>
   <main id="main" tabindex="-1">
-    <section aria-labelledby="rss-section-title">
-      <h2 id="rss-section-title">RSS 뉴스 불러오기</h2>
-      <form id="rss-form" aria-label="RSS 피드 입력">
-        <label for="rss-url">RSS 피드 URL:</label>
-        <input type="url" id="rss-url" name="rss-url" placeholder="https://news.example.com/rss" required>
-        <button type="submit">불러오기</button>
+    <!-- 날짜검색 -->
+    <section class="tab-content" id="tab-date">
+      <form id="date-search-form" aria-label="날짜 검색">
+        <label for="year">연도</label>
+        <input type="number" id="year" name="year" min="1900" max="2100" value="2024" required>
+        <label for="month">월</label>
+        <input type="number" id="month" name="month" min="1" max="12" value="6" required>
+        <label for="day">일</label>
+        <input type="number" id="day" name="day" min="1" max="31" value="6" required>
+        <button type="submit">이동</button>
       </form>
-      <div>
-        <button class="preset-btn" data-url="https://www.yonhapnewstv.co.kr/browse/feed/">연합뉴스TV</button>
-        <button class="preset-btn" data-url="http://feeds.bbci.co.uk/news/rss.xml">BBC News</button>
-      </div>
+      <div id="news-cards"></div>
     </section>
-    <section id="news-cards" aria-live="polite" aria-label="뉴스 카드 목록">
-      <!-- 카드 뉴스가 여기에 동적으로 생성됩니다 -->
+    <!-- 키워드검색 -->
+    <section class="tab-content" id="tab-keyword" hidden>
+      <form id="keyword-search-form" aria-label="키워드 검색">
+        <label for="keyword">키워드</label>
+        <input type="text" id="keyword" name="keyword" required>
+        <button type="submit">검색</button>
+      </form>
+      <div id="keyword-news-cards"></div>
+    </section>
+    <!-- 상세검색 -->
+    <section class="tab-content" id="tab-detail" hidden>
+      <form id="detail-search-form" aria-label="상세 검색">
+        <label for="detail-keyword">키워드</label>
+        <input type="text" id="detail-keyword" name="detail-keyword">
+        <label for="press">언론사</label>
+        <input type="text" id="press" name="press">
+        <label for="category">카테고리</label>
+        <input type="text" id="category" name="category">
+        <button type="submit">상세검색</button>
+      </form>
+      <div id="detail-news-cards"></div>
+    </section>
+    <!-- 마이스크랩 -->
+    <section class="tab-content" id="tab-scrap" hidden>
+      <h2>마이스크랩</h2>
+      <div id="scrap-news-cards"></div>
     </section>
   </main>
   <footer>

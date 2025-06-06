@@ -20,6 +20,7 @@ nav a:focus, nav a:hover { text-decoration: underline; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 }
 .news-card img {
   width: 100%;
@@ -33,6 +34,23 @@ nav a:focus, nav a:hover { text-decoration: underline; }
 .news-card-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; }
 .news-card-desc { font-size: 0.95rem; margin-bottom: 0.5rem; }
 .news-card-meta { font-size: 0.85rem; color: #666; margin-top: auto; }
+.scrap-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ffe066;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+.scrap-btn.active {
+  background: #ffd700;
+}
 .news-date-heading {
   font-size: 1.2rem;
   font-weight: bold;
@@ -47,7 +65,31 @@ nav a:focus, nav a:hover { text-decoration: underline; }
   gap: 1rem;
   margin-bottom: 2rem;
 }
+.main-tabs {
+  display: flex;
+  gap: 1rem;
+  background: #e9ecef;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid #0055a5;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  color: #0055a5;
+  border-bottom: 2px solid transparent;
+  transition: background 0.2s;
+}
+.tab-btn.active {
+  font-weight: bold;
+  border-bottom: 2px solid #0055a5;
+  background: #fff;
+}
+.tab-content { margin-top: 2rem; }
+[hidden] { display: none !important; }
 @media (max-width: 700px) {
-  #news-cards { flex-direction: column; align-items: center; }
+  #news-cards, .news-date-group { flex-direction: column; align-items: center; }
   .news-card { width: 95%; }
 } 
