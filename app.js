@@ -4,6 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const newsCards = document.getElementById('news-cards');
   const presetBtns = document.querySelectorAll('.preset-btn');
 
+  // 대체 이미지 URL (접근성 및 글로벌 표준 준수)
+  const fallbackImg = 'https://via.placeholder.com/300x160?text=No+Image';
+
+  // pubDate를 YYYY-MM-DD(ISO 8601)로 변환
+  function formatDate(dateStr) {
+    if (!dateStr) return '날짜 없음';
+    const d = new Date(dateStr);
+    if (isNaN(d)) return '날짜 없음';
+    return d.toISOString().slice(0, 10);
+  }
+
   // 프리셋 버튼 클릭 시
   presetBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -25,33 +36,47 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       const parser = new DOMParser();
       const xml = parser.parseFromString(data.contents, 'application/xml');
-      const items = xml.querySelectorAll('item');
+      const items = Array.from(xml.querySelectorAll('item'));
       if (!items.length) throw new Error('뉴스 항목이 없습니다.');
+      // pubDate 기준으로 그룹화
+      const grouped = {};
+      items.slice(0, 50).forEach(item => { // 최대 50개까지 그룹화
+        const pubDate = formatDate(item.querySelector('pubDate')?.textContent);
+        if (!grouped[pubDate]) grouped[pubDate] = [];
+        grouped[pubDate].push(item);
+      });
+      // 날짜 내림차순 정렬
+      const sortedDates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
       newsCards.innerHTML = '';
-      items.forEach((item, idx) => {
-        if (idx >= 10) return; // 최대 10개만 표시
-        const title = item.querySelector('title')?.textContent || '제목 없음';
-        const link = item.querySelector('link')?.textContent || '#';
-        const desc = item.querySelector('description')?.textContent || '';
-        const pubDate = item.querySelector('pubDate')?.textContent || '';
-        let img = '';
-        // 이미지 추출 (media:content, enclosure, description 내 img 등)
-        const media = item.querySelector('media\\:content, enclosure[url][type^="image"]');
-        if (media) img = media.getAttribute('url');
-        else {
-          const descImg = desc.match(/<img[^>]+src=\"([^\"]+)\"/);
-          if (descImg) img = descImg[1];
-        }
-        newsCards.innerHTML += `
-          <article class="news-card" tabindex="0" aria-label="${title}">
-            ${img ? `<img src="${img}" alt="${title} 대표 이미지">` : ''}
+      sortedDates.forEach(date => {
+        newsCards.innerHTML += `<h3 class="news-date-heading">${date}</h3><div class="news-date-group" id="group-${date}"></div>`;
+        const groupDiv = document.getElementById(`group-${date}`);
+        grouped[date].slice(0, 10).forEach(item => {
+          const title = item.querySelector('title')?.textContent || '제목 없음';
+          const link = item.querySelector('link')?.textContent || '#';
+          const desc = item.querySelector('description')?.textContent || '';
+          let img = '';
+          // 이미지 추출 (media:content, enclosure, description 내 img 등)
+          const media = item.querySelector('media\\:content, enclosure[url][type^="image"]');
+          if (media) img = media.getAttribute('url');
+          else {
+            const descImg = desc.match(/<img[^>]+src=\"([^\"]+)\"/);
+            if (descImg) img = descImg[1];
+          }
+          // 카드 생성
+          const card = document.createElement('article');
+          card.className = 'news-card';
+          card.tabIndex = 0;
+          card.setAttribute('aria-label', title);
+          card.innerHTML = `
+            <img src="${img || fallbackImg}" alt="${title} 대표 이미지" onerror="this.onerror=null;this.src='${fallbackImg}';">
             <div class="news-card-content">
               <a href="${link}" target="_blank" rel="noopener noreferrer" class="news-card-title">${title}</a>
               <div class="news-card-desc">${desc.replace(/<[^>]+>/g, '').slice(0, 120)}...</div>
-              <div class="news-card-meta">${pubDate}</div>
             </div>
-          </article>
-        `;
+          `;
+          groupDiv.appendChild(card);
+        });
       });
     } catch (err) {
       newsCards.innerHTML = `<p>뉴스를 불러오지 못했습니다. (${err.message})</p>`;

@@ -26,11 +26,27 @@ nav a:focus, nav a:hover { text-decoration: underline; }
   height: 160px;
   object-fit: cover;
   background: #eee;
+  display: block;
+  border-bottom: 1px solid #eee;
 }
 .news-card-content { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
 .news-card-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; }
 .news-card-desc { font-size: 0.95rem; margin-bottom: 0.5rem; }
 .news-card-meta { font-size: 0.85rem; color: #666; margin-top: auto; }
+.news-date-heading {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 2.5rem 0 1rem 0;
+  color: #0055a5;
+  border-left: 4px solid #0055a5;
+  padding-left: 0.5rem;
+}
+.news-date-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
 @media (max-width: 700px) {
   #news-cards { flex-direction: column; align-items: center; }
   .news-card { width: 95%; }
